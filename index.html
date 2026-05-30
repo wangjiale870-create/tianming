@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>天命 — 挂机修仙抽卡</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #050510;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      overflow: hidden;
+    }
+    #gameContainer {
+      position: relative;
+      border: 2px solid #333366;
+      border-radius: 8px;
+      box-shadow: 0 0 30px rgba(100, 100, 255, 0.3);
+    }
+    canvas {
+      display: block;
+      border-radius: 6px;
+    }
+    #resetBtn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(0,0,0,0.5);
+      color: #666;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 10px;
+      cursor: pointer;
+    }
+    #resetBtn:hover { color: #ff4444; }
+  </style>
+</head>
+<body>
+  <div id="gameContainer">
+    <canvas id="gameCanvas"></canvas>
+    <button id="resetBtn" onclick="resetGame()">重置</button>
+  </div>
+
+  <!-- 数据表 -->
+  <script src="js/data/realms.js"></script>
+  <script src="js/data/weapons.js"></script>
+  <script src="js/data/skills.js"></script>
+  <script src="js/data/enemies.js"></script>
+
+  <!-- 核心 -->
+  <script src="js/core/GameState.js"></script>
+  <script src="js/core/DataStore.js"></script>
+
+  <!-- 系统 -->
+  <script src="js/systems/CultivationSystem.js"></script>
+  <script src="js/systems/GachaSystem.js"></script>
+  <script src="js/systems/BattleSystem.js"></script>
+  <script src="js/systems/ShopSystem.js"></script>
+  <script src="js/systems/AudioSystem.js"></script>
+  <script src="js/systems/TaskSystem.js"></script>
+
+  <!-- UI -->
+  <script src="js/ui/UIManager.js"></script>
+
+  <!-- 主入口 -->
+  <script src="game.js"></script>
+</body>
+</html>
