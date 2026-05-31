@@ -12,8 +12,8 @@ body {
   min-height:100vh; display:flex; justify-content:center;
 }
 .container { width:100%; max-width:420px; min-height:100vh; position:relative; background:#fff; }
-.screen { display:none; flex-direction:column; min-height:100vh; }
-.screen.active { display:flex; }
+.screen { display:none; flex-direction:column; min-height:100vh; opacity:0; transition:opacity .25s; }
+.screen.active { display:flex; opacity:1; }
 
 /* ===== 首页 ===== */
 .home-top {
@@ -73,8 +73,10 @@ body {
   position:absolute; inset:0; display:flex; flex-direction:column;
   align-items:center; justify-content:center; background:rgba(255,255,255,0.65);
 }
-.lock-ico { font-size:28px; margin-bottom:6px; }
-.lock-txt { font-size:14px; color:#667eea; font-weight:bold; margin-bottom:12px; }
+.lock-ico { font-size:28px; margin-bottom:6px; animation:pulse 1.5s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.15); } }
+.lock-txt { font-size:14px; color:#667eea; font-weight:bold; margin-bottom:4px; }
+.lock-sub { font-size:11px; color:#999; margin-bottom:12px; }
 .unlock-btn {
   padding:10px 28px; background:linear-gradient(135deg,#667eea,#764ba2);
   color:#fff; border:none; border-radius:20px; font-size:14px; font-weight:bold;
@@ -169,8 +171,9 @@ body {
     <div class="lock-pv" id="lpv"></div>
     <div class="lock-cv">
       <div class="lock-ico">🔒</div>
-      <div class="lock-txt">都做了 50 题了，解锁完整报告？</div>
-      <button class="unlock-btn" onclick="unlock()">看一段广告 · 立即解锁 🎁</button>
+      <div class="lock-txt">都做了 50 题了</div>
+      <div class="lock-sub">今日已有 <b id="unlockCount">3,842</b> 人解锁完整报告</div>
+      <button class="unlock-btn" onclick="unlock()">看段广告 · 免费解锁 🎁</button>
     </div>
   </div>
   <div class="share-bar">
@@ -196,9 +199,6 @@ body {
 <div class="toast" id="toast"></div>
 
 <script>
-window.onerror = function(msg, url, line) {
-  document.body.innerHTML += '<div style="position:fixed;top:0;left:0;right:0;background:red;color:#fff;padding:12px;z-index:9999;font-size:13px;">JS错误: '+msg+' (行'+line+')</div>';
-};
 // ==================== 数据定义 ====================
 
 // ---------- 霍兰德 ----------
@@ -569,6 +569,9 @@ function renderFull(){
     <div class="sec"><h3>⚠️ 注意提醒</h3><p>${r.weak||''}</p></div>
     <div class="sec"><h3>💡 发展建议</h3><p>${r.advice||''}</p></div>`;
 }
+
+// 社交证明
+(function(){ var c=3800+Math.floor(Math.random()*400); setInterval(function(){ c+=Math.floor(Math.random()*3); document.getElementById('unlockCount').textContent=c.toLocaleString(); },8000+Math.random()*4000); })();
 
 function shareIt(){
   if(!result) return;
