@@ -522,10 +522,10 @@ function renderQ(){
   const t = currentTest;
   if(qi >= t.questions.length){ finish(); return; }
   const q = t.questions[qi];
-  $('#pbar').style.width = ((qi+1)/t.questions.length*100)+'%';
-  $('#qnum').textContent = `${t.name} · 第 ${qi+1} / ${t.questions.length} 题`;
-  $('#qtext').textContent = q.text;
-  const o = $('#opts'); o.innerHTML = '';
+  $('pbar').style.width = ((qi+1)/t.questions.length*100)+'%';
+  $('qnum').textContent = `${t.name} · 第 ${qi+1} / ${t.questions.length} 题`;
+  $('qtext').textContent = q.text;
+  const o = $('opts'); o.innerHTML = '';
   ['非常符合','比较符合','不太符合','完全不符'].forEach((label,i)=>{
     const b = document.createElement('button'); b.className='opt'; b.textContent=label;
     b.onclick = () => {
@@ -547,11 +547,11 @@ function finish(){
 
 function renderRes(){
   const r = result;
-  $('#ricon').textContent = r.icon;
-  $('#rname').textContent = r.name;
-  $('#rsub').textContent = r.sub || '';
-  $('#rcard').innerHTML = `<h3>概述</h3><p>${r.summary}</p>`;
-  $('#lpv').innerHTML = `<h3>完整报告包含</h3><p>✦ 性格特质详析<br>✦ 适合职业列表<br>✦ 弱点与注意提醒<br>✦ 个性化发展建议</p>`;
+  $('ricon').textContent = r.icon;
+  $('rname').textContent = r.name;
+  $('rsub').textContent = r.sub || '';
+  $('rcard').innerHTML = `<h3>概述</h3><p>${r.summary}</p>`;
+  $('lpv').innerHTML = `<h3>完整报告包含</h3><p>✦ 性格特质详析<br>✦ 适合职业列表<br>✦ 弱点与注意提醒<br>✦ 个性化发展建议</p>`;
 }
 
 // ==================== 解锁 ====================
@@ -560,9 +560,9 @@ function unlock(){
 }
 function renderFull(){
   const r = result;
-  $('#fricon').textContent = r.icon;
-  $('#frname').textContent = r.name + ' · 完整报告';
-  $('#frbody').innerHTML = `
+  $('fricon').textContent = r.icon;
+  $('frname').textContent = r.name + ' · 完整报告';
+  $('frbody').innerHTML = `
     <div class="sec"><h3>🔍 人格概述</h3><p>${r.summary}</p></div>
     <div class="sec"><h3>📋 性格特质</h3><div class="tags">${(r.traits||[]).map(t=>'<span class="tag">'+t+'</span>').join('')}</div></div>
     <div class="sec"><h3>💼 适配职业</h3><p>${r.careers||''}</p></div>
