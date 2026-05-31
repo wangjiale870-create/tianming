@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>霍兰德职业兴趣测试</title>
+<title>职业性格测试中心</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -15,30 +15,31 @@ body {
 .screen { display:none; flex-direction:column; min-height:100vh; }
 .screen.active { display:flex; }
 
-/* 首页 */
-.home-bg {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color:#fff; text-align:center; padding:60px 24px 40px; flex:1;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
+/* ===== 首页 ===== */
+.home-top {
+  background: linear-gradient(135deg, #4a3cdb 0%, #8b5cf6 50%, #ec4899 100%);
+  color:#fff; text-align:center; padding:44px 24px 32px;
 }
-.home-icon { font-size:56px; margin-bottom:16px; }
-.home-title { font-size:24px; font-weight:bold; letter-spacing:3px; margin-bottom:6px; }
-.home-sub  { font-size:13px; opacity:0.85; margin-bottom:8px; }
-.home-badge { display:inline-block; padding:4px 14px; background:rgba(255,255,255,0.15); border-radius:12px; font-size:11px; }
-.home-info { background:#f8f7f4; text-align:center; padding:24px 20px; }
-.home-info p { font-size:13px; color:#888; line-height:2; }
-.start-btn {
-  display:block; margin:24px auto 0; padding:15px 56px;
-  background:linear-gradient(135deg,#667eea,#764ba2); color:#fff;
-  border:none; border-radius:28px; font-size:17px; font-weight:bold;
-  letter-spacing:2px; cursor:pointer; box-shadow:0 4px 16px rgba(102,126,234,0.35);
+.home-top h1 { font-size:24px; font-weight:bold; letter-spacing:2px; margin-bottom:6px; }
+.home-top p  { font-size:13px; opacity:0.85; }
+.home-body { background:#f8f7f4; padding:20px 16px; flex:1; }
+.test-card {
+  display:flex; align-items:center; background:#fff; border-radius:14px;
+  padding:18px 16px; margin-bottom:14px; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.04); transition:transform .15s;
 }
-.start-btn:active { transform:scale(0.96); }
+.test-card:active { transform:scale(0.98); }
+.test-card .tc-icon { font-size:36px; width:52px; text-align:center; flex-shrink:0; }
+.test-card .tc-info { flex:1; margin-left:12px; }
+.test-card .tc-name { font-size:16px; font-weight:bold; color:#333; }
+.test-card .tc-desc { font-size:12px; color:#999; margin-top:3px; }
+.test-card .tc-meta { font-size:11px; color:#bbb; margin-top:3px; }
+.test-card .tc-arrow { font-size:18px; color:#ccc; flex-shrink:0; }
 
-/* 题目 */
+/* ===== 题目 ===== */
 #quiz { padding:24px 20px; }
-.progress-bar { height:4px; background:#eee; border-radius:2px; margin-bottom:28px; }
-.progress-fill { height:100%; background:linear-gradient(90deg,#667eea,#764ba2); border-radius:2px; transition:width .3s; }
+.pb-wrap { height:4px; background:#eee; border-radius:2px; margin-bottom:28px; }
+.pb-fill { height:100%; border-radius:2px; transition:width .3s; }
 .q-num { font-size:12px; color:#999; margin-bottom:6px; }
 .q-text { font-size:18px; font-weight:bold; color:#333; margin-bottom:24px; line-height:1.5; }
 .opt {
@@ -47,13 +48,14 @@ body {
   color:#555; font-size:14px; text-align:left; cursor:pointer; transition:all .15s;
 }
 .opt:active { background:#ede8ff; border-color:#667eea; color:#333; }
+.back-link { display:block; margin-top:16px; text-align:center; color:#aaa; font-size:12px; cursor:pointer; }
 
-/* 结果页 */
+/* ===== 免费结果 ===== */
 #result { padding:24px 20px; }
-.res-header { text-align:center; margin:20px 0 24px; }
+.res-hd { text-align:center; margin:20px 0 24px; }
 .res-icon { font-size:64px; margin-bottom:10px; }
-.res-type { font-size:22px; font-weight:bold; color:#333; margin-bottom:4px; letter-spacing:2px; }
-.res-code { font-size:13px; color:#999; }
+.res-name { font-size:22px; font-weight:bold; color:#333; margin-bottom:4px; letter-spacing:2px; }
+.res-sub  { font-size:13px; color:#999; }
 .res-card {
   background:#f8f7f4; border-radius:12px; padding:18px; margin-bottom:20px;
 }
@@ -64,15 +66,15 @@ body {
   position:relative; border-radius:12px; overflow:hidden; margin:16px 0;
   background:#fafafa; border:1px solid #eee;
 }
-.lock-preview { padding:18px; filter:blur(5px); user-select:none; }
-.lock-preview h3 { font-size:14px; color:#667eea; margin-bottom:8px; }
-.lock-preview p { font-size:12px; color:#999; line-height:1.8; }
-.lock-cover {
+.lock-pv { padding:18px; filter:blur(5px); user-select:none; }
+.lock-pv h3 { font-size:14px; color:#667eea; margin-bottom:8px; }
+.lock-pv p { font-size:12px; color:#999; line-height:1.8; }
+.lock-cv {
   position:absolute; inset:0; display:flex; flex-direction:column;
   align-items:center; justify-content:center; background:rgba(255,255,255,0.65);
 }
-.lock-icon { font-size:28px; margin-bottom:6px; }
-.lock-text { font-size:14px; color:#667eea; font-weight:bold; margin-bottom:12px; }
+.lock-ico { font-size:28px; margin-bottom:6px; }
+.lock-txt { font-size:14px; color:#667eea; font-weight:bold; margin-bottom:12px; }
 .unlock-btn {
   padding:10px 28px; background:linear-gradient(135deg,#667eea,#764ba2);
   color:#fff; border:none; border-radius:20px; font-size:14px; font-weight:bold;
@@ -87,13 +89,13 @@ body {
 }
 .share-btn:active { background:#f5f0eb; }
 
-/* 完整报告 */
+/* ===== 完整报告 ===== */
 #full { padding:24px 20px; }
 .sec { margin-bottom:22px; }
 .sec h3 { font-size:15px; color:#667eea; margin-bottom:10px; border-left:3px solid #667eea; padding-left:10px; }
 .sec p,.sec li { font-size:13px; color:#555; line-height:1.9; }
 .sec ul { padding-left:16px; }
-.tag-row { display:flex; flex-wrap:wrap; gap:6px; }
+.tags { display:flex; flex-wrap:wrap; gap:6px; }
 .tag {
   padding:5px 14px; background:#ede8ff; color:#667eea;
   border-radius:14px; font-size:12px;
@@ -109,71 +111,95 @@ body {
 <body>
 <div class="container">
 
-<!-- ========== 首页 ========== -->
+<!-- ==================== 首页 ==================== -->
 <div class="screen active" id="home">
-  <div class="home-bg">
-    <div class="home-icon">🧭</div>
-    <div class="home-title">霍兰德职业兴趣测试</div>
-    <div class="home-sub">Holland Code Career Test</div>
-    <div class="home-badge">基于 RIASEC 六型理论</div>
+  <div class="home-top">
+    <h1>🔮 性格测试中心</h1>
+    <p>了解自己，找到最适合你的人生方向</p>
   </div>
-  <div class="home-info">
-    <p>◉ 50 道选择题，约 5 分钟完成<br>
-       ◉ 发现你的主导人格类型<br>
-       ◉ 匹配最适合你的职业方向<br>
-       ◉ 全球 3000 万+ 人使用过的经典测试</p>
-    <button class="start-btn" onclick="start()">开 始 测 试</button>
+  <div class="home-body">
+    <div class="test-card" onclick="selectTest('holland')">
+      <div class="tc-icon">🧭</div>
+      <div class="tc-info">
+        <div class="tc-name">霍兰德职业兴趣测试</div>
+        <div class="tc-desc">发现你的职业人格，匹配合适工作</div>
+        <div class="tc-meta">50 题 · 6 种职业类型 · 全球通用</div>
+      </div>
+      <div class="tc-arrow">›</div>
+    </div>
+    <div class="test-card" onclick="selectTest('enneagram')">
+      <div class="tc-icon">🎭</div>
+      <div class="tc-info">
+        <div class="tc-name">九型人格测试</div>
+        <div class="tc-desc">360 度看清你的性格全貌</div>
+        <div class="tc-meta">50 题 · 9 种人格 · 心理学经典</div>
+      </div>
+      <div class="tc-arrow">›</div>
+    </div>
+    <div class="test-card" onclick="selectTest('color')">
+      <div class="tc-icon">🎨</div>
+      <div class="tc-info">
+        <div class="tc-name">性格色彩测试</div>
+        <div class="tc-desc">红蓝黄绿，你是哪一种颜色？</div>
+        <div class="tc-meta">50 题 · 4 色人格 · 风靡全网</div>
+      </div>
+      <div class="tc-arrow">›</div>
+    </div>
   </div>
 </div>
 
-<!-- ========== 题目 ========== -->
+<!-- ==================== 题目 ==================== -->
 <div class="screen" id="quiz">
-  <div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+  <div class="pb-wrap"><div class="pb-fill" id="pbar" style="background:linear-gradient(90deg,#667eea,#764ba2)"></div></div>
   <div class="q-num" id="qnum"></div>
   <div class="q-text" id="qtext"></div>
   <div id="opts"></div>
+  <div class="back-link" onclick="show('home')">← 返回首页，换一种测试</div>
 </div>
 
-<!-- ========== 免费结果 ========== -->
+<!-- ==================== 免费结果 ==================== -->
 <div class="screen" id="result">
-  <div class="res-header">
+  <div class="res-hd">
     <div class="res-icon" id="ricon"></div>
-    <div class="res-type" id="rtype"></div>
-    <div class="res-code" id="rcode"></div>
+    <div class="res-name" id="rname"></div>
+    <div class="res-sub" id="rsub"></div>
   </div>
   <div class="res-card" id="rcard"></div>
   <div class="lock-box">
-    <div class="lock-preview" id="lprev"></div>
-    <div class="lock-cover">
-      <div class="lock-icon">🔒</div>
-      <div class="lock-text">解锁完整职业报告</div>
-      <button class="unlock-btn" onclick="unlock()">¥1 解锁完整报告</button>
+    <div class="lock-pv" id="lpv"></div>
+    <div class="lock-cv">
+      <div class="lock-ico">🔒</div>
+      <div class="lock-txt">都做了 50 题了，解锁完整报告？</div>
+      <button class="unlock-btn" onclick="unlock()">看一段广告 · 立即解锁 🎁</button>
     </div>
   </div>
   <div class="share-bar">
-    <button class="share-btn" onclick="shareIt()">📤 测测朋友的职业人格</button>
+    <button class="share-btn" onclick="shareIt()">📤 测测朋友是什么类型</button>
   </div>
+  <div class="back-link" onclick="show('home')">← 返回首页</div>
 </div>
 
-<!-- ========== 完整报告 ========== -->
+<!-- ==================== 完整报告 ==================== -->
 <div class="screen" id="full">
-  <div class="res-header">
+  <div class="res-hd">
     <div class="res-icon" id="fricon"></div>
-    <div class="res-type" id="frtype"></div>
+    <div class="res-name" id="frname"></div>
   </div>
   <div id="frbody"></div>
   <div class="share-bar" style="padding-top:10px;">
-    <button class="share-btn" onclick="shareIt()">📤 测测朋友的职业人格</button>
+    <button class="share-btn" onclick="shareIt()">📤 测测朋友是什么类型</button>
   </div>
+  <div class="back-link" onclick="show('home')">← 返回首页，测别的</div>
 </div>
 
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
-// ========== 题目（霍兰德六型 × 8-9 题 = 50 题）==========
-const Q = [
-  // R 现实型（8题）
+// ==================== 数据定义 ====================
+
+// ---------- 霍兰德 ----------
+const HOLLAND_Q = [
   { text:'动手操作工具或修理物品让你感到快乐吗？', type:'R' },
   { text:'你喜欢在户外工作，而不是坐在办公室里吗？', type:'R' },
   { text:'你更喜欢动手实践，而不是阅读理论吗？', type:'R' },
@@ -182,7 +208,6 @@ const Q = [
   { text:'你觉得种花、养鱼、做手工比聊天更有意思吗？', type:'R' },
   { text:'你喜欢运动、健身，享受身体发力的感觉吗？', type:'R' },
   { text:'遇到问题，你的第一反应是"先试着修一下"而不是"找人来修"吗？', type:'R' },
-  // I 研究型（9题）
   { text:'你享受做科学实验或分析数据的过程吗？', type:'I' },
   { text:'遇到不懂的事，你会一直查资料直到弄明白吗？', type:'I' },
   { text:'你善于发现事物背后的规律和逻辑吗？', type:'I' },
@@ -192,7 +217,6 @@ const Q = [
   { text:'你觉得"搞清楚真相"比"让别人喜欢你"更重要吗？', type:'I' },
   { text:'做决定时，你更依赖数据和事实，而不是直觉吗？', type:'I' },
   { text:'你对科学、哲学、数学等抽象领域有天然的好奇心吗？', type:'I' },
-  // A 艺术型（8题）
   { text:'你对绘画、音乐、写作等创作活动有热情吗？', type:'A' },
   { text:'你的想象力丰富，经常在脑子里"编故事"吗？', type:'A' },
   { text:'你不喜欢被规则束缚，喜欢用自己独特的方式做事吗？', type:'A' },
@@ -201,7 +225,6 @@ const Q = [
   { text:'你的穿着打扮或房间布置有自己的风格，不太随大流吗？', type:'A' },
   { text:'别人会觉得你"想法独特"或"不走寻常路"吗？', type:'A' },
   { text:'你对色彩、构图、节奏等美学元素比较敏感吗？', type:'A' },
-  // S 社会型（8题）
   { text:'朋友遇到困难会主动找你倾诉或寻求建议吗？', type:'S' },
   { text:'你喜欢教别人东西，帮助对方成长吗？', type:'S' },
   { text:'你善于察觉别人的情绪变化吗？', type:'S' },
@@ -210,7 +233,6 @@ const Q = [
   { text:'你觉得自己是一个有耐心听别人说话的人吗？', type:'S' },
   { text:'参加志愿活动或帮助陌生人会让你感到开心吗？', type:'S' },
   { text:'你愿意为了别人的需求而放下自己手头的事吗？', type:'S' },
-  // E 企业型（9题）
   { text:'你在团队中喜欢担任领导者的角色吗？', type:'E' },
   { text:'你喜欢说服别人接受你的观点吗？', type:'E' },
   { text:'你对商业、赚钱、创业有强烈的兴趣吗？', type:'E' },
@@ -220,7 +242,6 @@ const Q = [
   { text:'你敢于承担风险，不怕失败带来的后果吗？', type:'E' },
   { text:'你对股票、投资、市场趋势等话题有兴趣吗？', type:'E' },
   { text:'别人会觉得你是一个"有气场"或"存在感强"的人吗？', type:'E' },
-  // C 常规型（8题）
   { text:'你做事喜欢提前规划，不喜欢临时抱佛脚吗？', type:'C' },
   { text:'你注重细节，能够发现别人忽略的小错误吗？', type:'C' },
   { text:'你善于整理和分类，喜欢让一切井井有条吗？', type:'C' },
@@ -231,52 +252,247 @@ const Q = [
   { text:'在混乱的环境中，你会本能地想要整理和理顺吗？', type:'C' },
 ];
 
-// ========== 结果 ==========
-const RES = {
-R:{ icon:'🔧', name:'现实型', eng:'Realistic', code:'R 型',
+const HOLLAND_RES = {
+R:{ icon:'🔧', name:'现实型', sub:'Realistic — 动手实干家',
   summary:'你是动手能力极强的实干家。喜欢和"物"打交道胜过和"人"打交道，讨厌空谈，信奉"做出来再说"。动手操作、户外运动、机械修理都是你的舒适区。',
   traits:['务实','直率','稳定','动手能力强','不善言辞'],
   careers:'工程师、技术员、建筑师、飞行员、厨师、机械师、农艺师、消防员、运动员',
   weak:'不太喜欢社交场合和长篇大论的工作。表达能力和人际敏感度需要刻意练习，在需要"人情世故"的环境里可能会觉得累。',
   advice:'选择能让你看到具体成果的工作——修理好的机器、建好的房子、种出来的作物。避免纯坐办公室、纯写报告的工作。你的价值在手里，不在嘴上。' },
-
-I:{ icon:'🔬', name:'研究型', eng:'Investigative', code:'I 型',
+I:{ icon:'🔬', name:'研究型', sub:'Investigative — 思考探索者',
   summary:'你是天生的思考者。对未知充满好奇，喜欢刨根问底。一个人安安静静研究一个课题对你来说不是折磨，是享受。逻辑严密，善于分析和解决问题。',
   traits:['理性','好奇','独立','善于分析','逻辑思维强'],
   careers:'科学家、医生、程序员、数据分析师、教授、研究员、工程师、药剂师',
-  weak:'社交不是你的强项。有时过于理性会让人觉得"冷"。需要注意不要把"分析问题"当成"解决问题"——有时候行动比分析更重要。',
+  weak:'社交不是你的强项。有时过于理性会让人觉得"冷"。需要注意的是，不要把所有问题都当成"待分析的课题"——有些事情需要感受，不是推理。',
   advice:'选择需要用脑的工作，最好是持续学习型行业（科研、IT、医学）。避免纯销售和纯管理方向。你的竞争优势在深度，不在速度。' },
-
-A:{ icon:'🎨', name:'艺术型', eng:'Artistic', code:'A 型',
-  summary:'你是充满创造力的人。不喜欢循规蹈矩，讨厌死板的流程。你的大脑是发散式的——一个点可以联想到十个画面。表达自我是你的本能，无论是通过文字、画面、声音还是任何形式。',
+A:{ icon:'🎨', name:'艺术型', sub:'Artistic — 创意表达者',
+  summary:'你是充满创造力的人。不喜欢循规蹈矩，讨厌死板的流程。你的大脑是发散式的——一个点可以联想到十个画面。表达自我是你的本能，无论是通过文字、画面还是任何形式。',
   traits:['创造力强','直觉敏锐','自由洒脱','情感丰富','厌恶规则'],
-  careers:'设计师、作家、摄影师、演员、音乐人、导演、画师、插花师、策展人',
+  careers:'设计师、作家、摄影师、演员、音乐人、导演、画师、策展人、花艺师',
   weak:'对重复性的、循规蹈矩的工作极度不耐受。有时候过于理想化，容易和"现实"起冲突。经济观念较弱，需要注意财务管理。',
-  advice:'找一个能发挥你审美和创造力的职业，但保留一份稳定的收入来源做底。你的天赋需要时间和空间来长成，不要急着"务实"。' },
-
-S:{ icon:'🤝', name:'社会型', eng:'Social', code:'S 型',
-  summary:'你是人际关系的天然高手。善于倾听，共情能力强，别人在你身边会觉得"被理解"。帮助别人成长、看到别人因为你的帮助变好——这给你最大的成就感。',
+  advice:'找一个能发挥你审美和创造力的职业，同时保留稳定收入做底。你的天赋需要时间和空间来长成，不要急着"务实"。' },
+S:{ icon:'🤝', name:'社会型', sub:'Social — 助人奉献者',
+  summary:'你是人际关系的天然高手。善于倾听，共情能力强，别人在你身边会觉得"被理解"。帮助别人成长、看到别人变好——这给你最大的成就感。',
   traits:['善解人意','乐于助人','沟通能力强','有耐心','有责任感'],
-  careers:'教师、心理咨询师、护士、社工、HR、培训师、销售、导游、主持人',
-  weak:'太在意别人的感受有时会委屈自己。需要建立人际边界——帮助别人之前，先照顾好自己。有时候容易卷入别人的情绪里。',
+  careers:'教师、心理咨询师、护士、社工、HR、培训师、导游、主持人、客户经理',
+  weak:'太在意别人的感受有时会委屈自己。需要建立人际边界——帮助别人之前，先照顾好自己。有时容易卷入别人的情绪里出不来。',
   advice:'选择与人打交道的工作，最好能直接看到"帮助的效果"（老师看到学生进步、医生看到病人康复）。你的价值在于温暖他人，别浪费这个天赋。' },
-
-E:{ icon:'💼', name:'企业型', eng:'Enterprising', code:'E 型',
+E:{ icon:'💼', name:'企业型', sub:'Enterprising — 领导开拓者',
   summary:'你有天然的领导者气质。自信、果断、目标导向。你不怕冲突，甚至享受在竞争中获胜的快感。说服别人、带领团队、做出决策——这些是让你兴奋的事情。',
   traits:['自信','果断','领导力','口才好','野心'],
   careers:'企业家、销售总监、律师、政治家、项目经理、投资顾问、经纪人、制片人',
   weak:'有时候过于强势，容易忽略他人的感受。需要培养"倾听"的习惯——最优秀的领导者不是最能说的，是最能"听"的。偶尔慢下来，看看身边的人。',
   advice:'选择有晋升空间、有竞争、有挑战性的工作。你的驱动力是"赢"，在一个有明确胜负标准的环境里你会成长最快。创业是你的强项方向。' },
-
-C:{ icon:'📋', name:'常规型', eng:'Conventional', code:'C 型',
-  summary:'你是秩序的守护者。做事有条理，注重细节，在混乱无序的环境里会感到不安。交给你的任务你会一丝不苟地完成，是团队里最可靠的"压舱石"。',
+C:{ icon:'📋', name:'常规型', sub:'Conventional — 秩序维护者',
+  summary:'你是秩序的守护者。做事有条理，注重细节，在混乱无序的环境里会感到不安。交给你的事情你会一丝不苟地完成，是团队里最可靠的"压舱石"。',
   traits:['细心','可靠','有条理','执行力强','追求准确'],
   careers:'会计、审计、行政、编辑、项目经理、数据分析师、银行职员、档案管理、公务员',
   weak:'不太适应频繁变化和模糊指令。有时候过于注重细节而忽略大局。需要培养"宏观视野"——偶尔从具体事务中抬起头来看看方向。',
-  advice:'选择有明确流程、有标准、有规则的工作。你在结构化环境里如鱼得水。避免需要大量"即兴发挥"的和高度不确定性的工作。你的价值是让一切有序运转。' }
+  advice:'选择有明确流程、有标准、有规则的工作。你在结构化环境里如鱼得水。避免需要大量"即兴发挥"和高度不确定性的工作。你的价值是让一切有序运转。' }
 };
 
-// ========== 状态 ==========
+// ---------- 九型人格 ----------
+const ENNEAGRAM_Q = [
+  { text:'你对自己要求很高，经常觉得自己还可以做得更好吗？', type:'1' },
+  { text:'你看到不公正的事会忍不住站出来说话吗？', type:'1' },
+  { text:'你心里有一套明确的是非标准，很难容忍"差不多就行"吗？', type:'1' },
+  { text:'别人有做得不对的地方，你会忍不住指出来吗？', type:'1' },
+  { text:'你做完一件事之后，经常会反复回想"哪里还能更好"吗？', type:'1' },
+  { text:'你天生知道别人需要什么，还没开口你就已经想到了吗？', type:'2' },
+  { text:'帮别人让你感到快乐，甚至超过帮自己吗？', type:'2' },
+  { text:'你很难对别人说"不"，即使自己已经很累了也不拒绝吗？', type:'2' },
+  { text:'你需要被需要的感觉——如果没人需要你，你会失落吗？', type:'2' },
+  { text:'你善于让身边的人感到温暖和被重视吗？', type:'2' },
+  { text:'你觉得人生就是一场竞赛，必须赢才有意义吗？', type:'3' },
+  { text:'你很在意自己在别人眼中的形象，会精心经营人设吗？', type:'3' },
+  { text:'你精力旺盛，可以同时推进好几个项目吗？', type:'3' },
+  { text:'你有时候分不清"真正的自己"和"扮演的角色"吗？', type:'3' },
+  { text:'你相信结果比过程重要，做成的事代表了你这个人吗？', type:'3' },
+  { text:'你觉得自己的情感比一般人更细腻、更复杂吗？', type:'4' },
+  { text:'你常常觉得自己和别人"不太一样"，有一种疏离感吗？', type:'4' },
+  { text:'你被悲伤或忧郁的美感所吸引吗？', type:'4' },
+  { text:'你在低落的时候反而灵感最多、创造力最强吗？', type:'4' },
+  { text:'你渴望被真正地理解，而不是表面的夸赞吗？', type:'4' },
+  { text:'在社交场合，你更喜欢观察和分析，而不是成为焦点吗？', type:'5' },
+  { text:'独处对你来说不是孤独，而是充电的方式吗？', type:'5' },
+  { text:'你倾向于用理性来理解一切，包括情感吗？', type:'5' },
+  { text:'在行动之前，你觉得必须先掌握足够的知识吗？', type:'5' },
+  { text:'你不太喜欢别人未经允许闯入你的私人空间吗？', type:'5' },
+  { text:'你对未知的事情容易往最坏的方向想吗？', type:'6' },
+  { text:'做决定之前，你总会反复权衡、向信任的人求证吗？', type:'6' },
+  { text:'你对自己的团队或朋友非常忠诚，不会轻易背叛吗？', type:'6' },
+  { text:'你善于发现潜在的威胁或计划中的漏洞吗？', type:'6' },
+  { text:'一旦你信任一个人，就会发自内心地支持和拥护他吗？', type:'6' },
+  { text:'你总是有很多新点子和新计划，但很难坚持到底吗？', type:'7' },
+  { text:'你讨厌无聊，需要持续的新鲜感和刺激吗？', type:'7' },
+  { text:'朋友都觉得你是"开心果"，总能带动气氛吗？', type:'7' },
+  { text:'你通常比较乐观，遇到坏事也能很快调整过来吗？', type:'7' },
+  { text:'你害怕被束缚——无论是工作、关系还是生活方式吗？', type:'7' },
+  { text:'你不怕冲突，在强者面前反而更有斗志吗？', type:'8' },
+  { text:'看到弱者被欺负，你会忍不住冲出来保护他们吗？', type:'8' },
+  { text:'你喜欢掌控局面，不太放心把事情交给别人吗？', type:'8' },
+  { text:'你在朋友面前很讲义气，为了守护重要的人可以拼命吗？', type:'8' },
+  { text:'你说话直来直去，不太会拐弯抹角吗？', type:'8' },
+  { text:'在团队里你通常是"和事佬"，能调和不同意见吗？', type:'9' },
+  { text:'你做决定容易犹豫，因为能理解每个人的立场吗？', type:'9' },
+  { text:'你很讨厌与人发生正面冲突，宁愿自己让步吗？', type:'9' },
+  { text:'你享受悠闲的生活节奏，不喜欢被催促吗？', type:'9' },
+  { text:'有时候你会为了维持和平而压抑自己的真实想法吗？', type:'9' },
+  { text:'当别人犯错时，你倾向于理解而不是指责吗？', type:'1' },
+  { text:'你内心的批评声音很强，连自己都经常被自己审判吗？', type:'1' },
+  { text:'你觉得"爱"是一种需要付出和行动的东西，不只是感觉吗？', type:'2' },
+  { text:'你内心深处害怕自己"不够好"，所以一直向前冲吗？', type:'3' },
+  { text:'在人群中你会观察气氛，但内心始终保留一份距离吗？', type:'5' },
+  { text:'你对新鲜事物的好奇心是驱动你生活的主要动力吗？', type:'7' },
+];
+
+const ENNEAGRAM_RES = {
+'1':{ icon:'⚖️', name:'完美型 · 改革者', sub:'The Reformer — 追求至善',
+  summary:'你是九型人格中的"完美主义者"。内心有一把高标准的尺，对自己和他人都有清晰的期望。正直、负责、有原则——人们信任你。但你也常常和自己过不去。',
+  traits:['正直','有原则','追求完美','责任感强','自我批评'],
+  careers:'法官、教师、质量管控、编辑、审计师、建筑师、医生',
+  weak:'容易陷入"永远不够好"的焦虑。需要练习"接受不完美"，学会对自己和他人宽容一点。',
+  advice:'你已经足够努力了。偶尔停下来告诉自己"这样就可以了"。你的高标准是天赋，不是诅咒。' },
+'2':{ icon:'💝', name:'助人型 · 给予者', sub:'The Helper — 以爱之名',
+  summary:'你是九型人格中的"给予者"。天生能感受到别人的需求，并主动伸出援手。你的价值感来自于"被需要"——当别人因为你而变得更好时，你觉得自己活着。',
+  traits:['温暖','体贴','慷慨','善于共情','乐于奉献'],
+  careers:'护士、社工、心理咨询师、教师、慈善工作、客服、HR',
+  weak:'容易忽视自己的需求。需要学会"先爱己，再爱人"，否则会耗尽自己。',
+  advice:'你的温柔是这个时代稀缺的礼物。但要记住：你值得被爱，不是因为你有用，而是因为你是你。' },
+'3':{ icon:'🏆', name:'成就型 · 实干家', sub:'The Achiever — 永不止步',
+  summary:'你是九型人格中的"成就者"。目标导向、执行力强、善于展示自己最好的那一面。你在人群里闪闪发光，总是那个"别人家的孩子"。但你有时候分不清自己是真的想赢，还是需要被看到。',
+  traits:['高效','自信','目标明确','适应力强','形象管理'],
+  careers:'企业家、销售、演员、公关、管理咨询、市场总监、记者',
+  weak:'太在意别人的看法，有时连自己真正想要什么都忘了。需要练习"什么事都不做也可以"的状态。',
+  advice:'你已经很出色了。不是所有东西都需要赢。偶尔放下目标，感受一下"不必证明自己"的自由。' },
+'4':{ icon:'🌙', name:'自我型 · 艺术家', sub:'The Individualist — 独一无二',
+  summary:'你是九型人格中的"浪漫主义者"。情感深沉、审美敏锐、有独特的内心世界。你觉得大多数人生活在表面，而你在寻找更深的真实。创造力是你的出口。',
+  traits:['敏感','深情','有创造力','真诚','有品味'],
+  careers:'作家、艺术家、音乐人、设计师、心理咨询师、摄影师、策展人',
+  weak:'容易沉溺在情绪里，觉得"没人懂我"。需要练习"被平凡接受"的感觉——不是所有东西都要深刻才值得。',
+  advice:'你的敏感不是弱点。但你不需要时时刻刻都"深刻"。普通的日子里也有光，试着看看窗外。' },
+'5':{ icon:'📚', name:'理智型 · 观察者', sub:'The Investigator — 洞见真知',
+  summary:'你是九型人格中的"思考者"。热爱知识、善于分析、享受独处。你对世界有自己独特的认知框架，不盲从、不跟风。囤积知识是你的本能。',
+  traits:['理性','独立','洞察力强','专注','善于思考'],
+  careers:'科学家、程序员、教授、分析师、工程师、哲学家、作家',
+  weak:'容易在"思考"中消耗太多时间，"行动"偏少。需要练习"先做再看"——不是所有事都要准备到完美再出发。',
+  advice:'你的大脑是你最大的武器。但别忘了你的身体也需要被照顾。走出去，运动、晒太阳、跟活人聊天。' },
+'6':{ icon:'🛡️', name:'忠诚型 · 守护者', sub:'The Loyalist — 未雨绸缪',
+  summary:'你是九型人格中的"忠诚者"。谨慎、负责、对信任的人和团队极度忠诚。你能比别人更早看到危机和陷阱。是一个值得依靠的朋友和同事。',
+  traits:['忠诚','谨慎','负责','直觉敏锐','未雨绸缪'],
+  careers:'安全分析师、警察、律师、财务、医生、公务员、项目经理',
+  weak:'容易过度焦虑，想到最坏的结果。需要练习"相信"——相信自己、相信他人、相信事情没有你想的那么糟。',
+  advice:'你预见到危险的能力是宝贵的。但大多数你担心的事情从未真的发生。深呼吸，给信任一次机会。' },
+'7':{ icon:'🎉', name:'活跃型 · 享乐者', sub:'The Enthusiast — 乐在其中',
+  summary:'你是九型人格中的"热情者"。乐观、有活力、充满好奇心。你的大脑是一个永远停不下来的创意机器——新点子、新计划、新的可能性源源不断。',
+  traits:['乐观','热情','好奇心强','多才多艺','善于活跃气氛'],
+  careers:'创业者、旅行博主、活动策划、主持人、销售、导演、自由职业',
+  weak:'容易半途而废，被下一个"更新鲜的东西"吸引走。需要练习"深耕"——有时候不是换方向的问题，是挖得不够深。',
+  advice:'你的热情是感染力的来源。但真正的满足感常常不在下一件事里，而是把当前这件事做透。' },
+'8':{ icon:'🦁', name:'领袖型 · 挑战者', sub:'The Challenger — 无所畏惧',
+  summary:'你是九型人格中的"挑战者"。力量感强、果断直接、有天然的保护欲。你不怕冲突，相信直面问题是解决问题最快的方式。在你的世界里，软弱不是美德。',
+  traits:['果断','自信','勇敢','正义感强','有保护欲'],
+  careers:'CEO、军人、律师、政治家、企业家、运动员、导演',
+  weak:'有时太硬了，给人压迫感。需要练习"柔软"——不是所有场合都需要你冲锋陷阵，偶尔示弱也是一种力量。',
+  advice:'你的勇气令人敬佩。但记住：最能保护别人的人，先要学会保护自己的软肋。偶尔让别人靠一下你，也偶尔靠一下别人。' },
+'9':{ icon:'🕊️', name:'平和型 · 调停者', sub:'The Peacemaker — 和谐至上',
+  summary:'你是九型人格中的"和事佬"。温和、包容、善于理解每个人的立场。有你在的地方，气氛就会变好。你不喜欢冲突，愿意为了和平而让步。',
+  traits:['温和','包容','善于倾听','有耐心','随和'],
+  careers:'调解员、心理咨询师、教师、医生、HR、外交官、服务行业',
+  weak:'为了维持和谐，有时会压抑自己的真实需求。需要练习"说出来"——有些事情不说出来，别人永远不知道。',
+  advice:'你不用永远充当那个"好相处"的人。你的意见和你的愤怒都是有意义的。表达出来，不是为了破坏和谐，是为了建立真正的关系。' }
+};
+
+// ---------- 性格色彩 ----------
+const COLOR_Q = [
+  { text:'你更喜欢成为众人瞩目的焦点，还是安静地观察？', type:'RY' },
+  { text:'你做决定更快依靠直觉，还是会三思而后行？', type:'RY' },
+  { text:'你说话比较直接，不太会拐弯抹角吗？', type:'R' },
+  { text:'你情绪来得快去得也快，不太记仇吗？', type:'R' },
+  { text:'你更喜欢热闹的聚会，而不是安静的独处吗？', type:'RY' },
+  { text:'你是一个"先行动、后思考"的人吗？', type:'R' },
+  { text:'你对新鲜事物有强烈的好奇心和尝试欲吗？', type:'RY' },
+  { text:'你容易被别人感染情绪，喜怒哀乐都写在脸上吗？', type:'R' },
+  { text:'你做事喜欢一步一步按计划来，而不是随性发挥吗？', type:'B' },
+  { text:'你做决定前会反复权衡利弊和后果吗？', type:'B' },
+  { text:'你更看重逻辑和事实，而不是感觉和氛围吗？', type:'B' },
+  { text:'你认为规则很重要，不太能接受"差不多就行了"吗？', type:'B' },
+  { text:'你对数字和细节比较敏感，能发现别人忽略的东西吗？', type:'B' },
+  { text:'你在团队中更愿意做研究和分析，而不是主持人吗？', type:'B' },
+  { text:'你做事比较认真严谨，朋友觉得你"靠谱但不够有趣"吗？', type:'B' },
+  { text:'你更喜欢"想清楚再做"，而不是"干起来再说"吗？', type:'B' },
+  { text:'你喜欢激励别人，用乐观的态度感染团队吗？', type:'Y' },
+  { text:'你对未来充满信心，觉得明天会比今天更好吗？', type:'Y' },
+  { text:'你比较健谈，善于跟各种类型的人聊起来吗？', type:'RY' },
+  { text:'你在工作和生活中都追求"做到更好""做到最好"吗？', type:'Y' },
+  { text:'朋友觉得你是一个"有梦想"的人吗？', type:'RY' },
+  { text:'你对自己有很高的期望，不甘于平庸吗？', type:'Y' },
+  { text:'你不怕挑战，甚至会主动寻找更大的挑战吗？', type:'Y' },
+  { text:'你觉得人生最重要的就是"活出价值"和"做出成绩"吗？', type:'Y' },
+  { text:'你更喜欢倾听，而不是表达吗？', type:'G' },
+  { text:'在朋友中间，你常常是话最少但最被依赖的那个人吗？', type:'G' },
+  { text:'你很容易原谅别人，"不值得为小事生气"吗？', type:'G' },
+  { text:'你觉得稳定的生活和关系，比刺激和新鲜感更重要吗？', type:'G' },
+  { text:'别人觉得你"脾气好""好相处"吗？', type:'G' },
+  { text:'你不喜欢变化太快的环境，需要时间适应吗？', type:'G' },
+  { text:'你会为了维持关系和气而委屈自己吗？', type:'G' },
+  { text:'你最看重的人际关系是"稳定"和"彼此理解"吗？', type:'G' },
+  { text:'你是一个有主见的人，不太容易被别人的意见左右吗？', type:'RY' },
+  { text:'你喜欢挑战权威和社会惯例吗？', type:'RY' },
+  { text:'你更享受"过程"而不是只看"结果"吗？', type:'RG' },
+  { text:'朋友遇到问题时会第一个来寻求你的安慰吗？', type:'G' },
+  { text:'你做事有条理，桌面和文件夹都整理得清清楚楚吗？', type:'B' },
+  { text:'你对别人的承诺非常看重，说到就一定要做到吗？', type:'B' },
+  { text:'你相信"先苦后甜"，愿意为了长远目标牺牲当下吗？', type:'B' },
+  { text:'你有时候过于乐观，导致忽略了实际的困难吗？', type:'RY' },
+  { text:'你容易对一件事情产生热情，但热情消退也快吗？', type:'RY' },
+  { text:'你是一个"有感染力的人"，别人愿意跟随你的节奏吗？', type:'Y' },
+  { text:'你内心深处是"理想主义"的，想改变世界而不是适应世界吗？', type:'Y' },
+  { text:'你对"无聊"的忍耐度很低，需要不断有新鲜刺激吗？', type:'RY' },
+  { text:'你不喜欢冲突，会尽量避免和人对立吗？', type:'G' },
+  { text:'你很少主动表达不满，更多地是默默忍受吗？', type:'G' },
+  { text:'你对自然和动物有天然的亲近感吗？', type:'G' },
+  { text:'你觉得人生应该"慢下来""享受当下"吗？', type:'G' },
+  { text:'你对细节有强迫症，一个小问题也要彻底解决吗？', type:'B' },
+  { text:'你在面对选择时通常会做一份详细的优缺点表格吗？', type:'B' },
+];
+
+const COLOR_RES = {
+R:{ icon:'🔴', name:'红色性格 · 行动派', sub:'果断、直接、充满行动力',
+  summary:'你是典型的"红色性格"——像一团火焰，热烈、直接、充满能量。你做事雷厉风行，喜欢"先干了再说"，讨厌犹豫和拖沓。你的情绪来得快去得也快，不爱记仇，心直口快，有时候可能会不小心得罪人但你自己都不知道。你最怕的是"无聊"和"没有新鲜感"。',
+  traits:['果断','直接','精力旺盛','乐观开朗','不拘小节'],
+  careers:'创业、销售、市场推广、主持人、演员、体育教练、活动策划',
+  weak:'耐心不够，容易半途而废。有时候说话太直接伤了人而不自知。需要注意放慢节奏，多听别人的想法。',
+  advice:'你的行动力是天赋，但偶尔停下来想一想"我到底要去哪"比"我跑得多快"更重要。和蓝色性格的人合作，你能冲，他们能稳，完美互补。' },
+B:{ icon:'🔵', name:'蓝色性格 · 思想派', sub:'严谨、深邃、追求完美',
+  summary:'你是典型的"蓝色性格"——像一片深海，表面平静，底下暗流涌动。你善于思考分析，看重逻辑和原则，做决定前会反复权衡利弊。你的靠谱和严谨让别人信任你，但有时候你也会因为"想太多"而犹豫不决。你最怕的是"不可控"和"没有规则"。',
+  traits:['严谨','理性','专注','有原则','重视细节'],
+  careers:'工程师、程序员、数据分析师、财务、研究员、医生、法官、编辑',
+  weak:'容易陷入纠结，行动力跟不上思考力。有时候过于较真，让人觉得"不通人情"。需要练习"放手"和"接受不完美"。',
+  advice:'你的深度思考是无价之宝。但世界不是一道数学题——有些事情没有标准答案。和红色性格的人交朋友，他们会帮你"动起来"。' },
+Y:{ icon:'🟡', name:'黄色性格 · 目标派', sub:'自信、目标明确、追求卓越',
+  summary:'你是典型的"黄色性格"——像正午的阳光，自信、有力、目标明确。你天生知道"我要什么"并愿意为之付出努力。你讨厌平庸，渴望卓越，对"混日子"的人理解无能。你的领导力和感染力让人愿意跟随你，但你有时候也给人"太强势"的感觉。',
+  traits:['目标导向','自信果断','领导力强','追求卓越','不轻易放弃'],
+  careers:'CEO、管理层、律师、导演、制片人、投资顾问、政治家、品牌创始人',
+  weak:'太关注结果，容易把人当成"资源"而不是"人"。工作狂倾向——注意健康和家庭关系。',
+  advice:'你已经很成功了，但真正的成功不是"赢了多少"而是"跟谁一起赢"。偶尔慢下来，陪陪身边的人，他们才是你最重要的资产。和绿色性格的人在一起，他们能让你柔软下来。' },
+G:{ icon:'🟢', name:'绿色性格 · 平和派', sub:'温和、包容、以和为贵',
+  summary:'你是典型的"绿色性格"——像草地和森林，给人稳定、安全、安心的感觉。你温和包容，善于倾听，朋友在你身边会觉得特别放松。你不喜欢冲突，愿意退一步保持和谐。但有时候你会因为"太好说话"而委屈了自己。你最怕的是"伤害别人"和"关系破裂"。',
+  traits:['温和','包容','善于倾听','稳定可靠','有耐心'],
+  careers:'心理咨询师、教师、护士、社工、HR、客服、调解员、行政、公务员',
+  weak:'为了维护和谐，常压抑自己的真实想法。不懂得说"不"，容易被人"占便宜"。需要练习"为自己发声"。',
+  advice:'你的温暖是这个世界的稀缺资源。但"好人"不等于"好欺负"。偶尔学会说"这是我的底线"，关系反而会更健康。和黄色性格的人做朋友，他们会帮你"争取权益"。' }
+};
+
+// ==================== 测试配置 ====================
+const tests = {
+  holland:  { name:'霍兰德职业兴趣测试', questions:HOLLAND_Q,  results:HOLLAND_RES,  types:['R','I','A','S','E','C'], color:'#667eea' },
+  enneagram:{ name:'九型人格测试',     questions:ENNEAGRAM_Q, results:ENNEAGRAM_RES, types:['1','2','3','4','5','6','7','8','9'], color:'#ec4899' },
+  color:    { name:'性格色彩测试',     questions:COLOR_Q,     results:COLOR_RES,     types:['R','B','Y','G'], color:'#f59e0b' },
+};
+
+// ==================== 全局状态 ====================
+let currentTest = null;
 let scores = {}, qi=0, result=null, unlocked=false;
 
 function $(id){ return document.getElementById(id); }
@@ -286,60 +502,77 @@ function show(id){
 }
 function toast(m){ const t=$('toast'); t.textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',1500); }
 
-// ========== 开始 ==========
-function start(){
-  scores={R:0,I:0,A:0,S:0,E:0,C:0}; qi=0; result=null; unlocked=false; show('quiz'); renderQ();
+// ==================== 选择测试 ====================
+function selectTest(key){
+  const t = tests[key];
+  currentTest = t;
+  scores = {}; for(let k of t.types) scores[k]=0;
+  qi=0; result=null; unlocked=false;
+  document.getElementById('pbar').style.background = 'linear-gradient(90deg,'+t.color+',#764ba2)';
+  show('quiz'); renderQ();
 }
+
+// ==================== 题目 ====================
 function renderQ(){
-  if(qi>=Q.length){ finish(); return; }
-  const q=Q[qi];
-  $('pbar').style.width=((qi+1)/Q.length*100)+'%';
-  $('qnum').textContent=`第 ${qi+1} / ${Q.length} 题`;
-  $('qtext').textContent=q.text;
-  const o=$('opts'); o.innerHTML='';
-  ['非常符合','比较符合','不太符合','完全不符'].forEach((t,i)=>{
-    const b=document.createElement('button'); b.className='opt'; b.textContent=t;
-    b.onclick=()=>{ scores[q.type]+=(3-i); qi++; renderQ(); };
+  const t = currentTest;
+  if(qi >= t.questions.length){ finish(); return; }
+  const q = t.questions[qi];
+  $('#pbar').style.width = ((qi+1)/t.questions.length*100)+'%';
+  $('#qnum').textContent = `${t.name} · 第 ${qi+1} / ${t.questions.length} 题`;
+  $('#qtext').textContent = q.text;
+  const o = $('#opts'); o.innerHTML = '';
+  ['非常符合','比较符合','不太符合','完全不符'].forEach((label,i)=>{
+    const b = document.createElement('button'); b.className='opt'; b.textContent=label;
+    b.onclick = () => {
+      const sc = (3-i);
+      const types = q.type.split('');
+      for(let k of types) scores[k] = (scores[k]||0) + sc;
+      qi++; renderQ();
+    };
     o.appendChild(b);
   });
 }
 
-// ========== 结算 ==========
+// ==================== 结算 ====================
 function finish(){
-  let max=0,best='R'; for(let k in scores){ if(scores[k]>max){max=scores[k];best=k;} }
-  result=RES[best]; unlocked=false; renderRes(); show('result');
-}
-function renderRes(){
-  const r=result;
-  $('ricon').textContent=r.icon; $('rtype').textContent=r.name; $('rcode').textContent=r.eng+' · '+r.code;
-  $('rcard').innerHTML=`<h3>人格概览</h3><p>${r.summary}</p>`;
-  $('lprev').innerHTML=`
-    <h3>完整报告包含</h3>
-    <p>✦ 性格特质详析<br>✦ 适合职业列表<br>✦ 弱点与注意提醒<br>✦ 个性化职业发展建议</p>`;
+  let max=0, best=currentTest.types[0];
+  for(let k in scores){ if(scores[k]>max){ max=scores[k]; best=k; } }
+  result = currentTest.results[best]; unlocked=false; renderRes(); show('result');
 }
 
-// ========== 解锁 ==========
+function renderRes(){
+  const r = result;
+  $('#ricon').textContent = r.icon;
+  $('#rname').textContent = r.name;
+  $('#rsub').textContent = r.sub || '';
+  $('#rcard').innerHTML = `<h3>概述</h3><p>${r.summary}</p>`;
+  $('#lpv').innerHTML = `<h3>完整报告包含</h3><p>✦ 性格特质详析<br>✦ 适合职业列表<br>✦ 弱点与注意提醒<br>✦ 个性化发展建议</p>`;
+}
+
+// ==================== 解锁 ====================
 function unlock(){
   unlocked=true; renderFull(); show('full');
 }
 function renderFull(){
-  const r=result;
-  $('fricon').textContent=r.icon; $('frtype').textContent=r.name+' · 完整职业报告';
-  $('frbody').innerHTML=`
+  const r = result;
+  $('#fricon').textContent = r.icon;
+  $('#frname').textContent = r.name + ' · 完整报告';
+  $('#frbody').innerHTML = `
     <div class="sec"><h3>🔍 人格概述</h3><p>${r.summary}</p></div>
-    <div class="sec"><h3>📋 性格特质</h3><div class="tag-row">${r.traits.map(t=>'<span class="tag">'+t+'</span>').join('')}</div></div>
-    <div class="sec"><h3>💼 适配职业</h3><p>${r.careers}</p></div>
-    <div class="sec"><h3>⚠️ 注意提醒</h3><p>${r.weak}</p></div>
-    <div class="sec"><h3>💡 发展建议</h3><p>${r.advice}</p></div>`;
+    <div class="sec"><h3>📋 性格特质</h3><div class="tags">${(r.traits||[]).map(t=>'<span class="tag">'+t+'</span>').join('')}</div></div>
+    <div class="sec"><h3>💼 适配职业</h3><p>${r.careers||''}</p></div>
+    <div class="sec"><h3>⚠️ 注意提醒</h3><p>${r.weak||''}</p></div>
+    <div class="sec"><h3>💡 发展建议</h3><p>${r.advice||''}</p></div>`;
 }
 
 function shareIt(){
-  const r=result;
-  const t=`🧭 我的职业人格：${r.name}（${r.code}）
+  if(!result) return;
+  const t = currentTest;
+  const msg = `${$('ricon').textContent} 我在「${t.name}」中测出：${result.name}
 
-测测你属于霍兰德六型中的哪一种？`;
-  if(navigator.share){ navigator.share({title:'霍兰德职业测试',text:t,url:location.href}); }
-  else { navigator.clipboard.writeText(t+'\n'+location.href).then(()=>toast('已复制！发给朋友吧')); }
+测测你是什么类型？`;
+  if(navigator.share){ navigator.share({title:t.name,text:msg,url:location.href}); }
+  else { navigator.clipboard.writeText(msg+'\n'+location.href).then(()=>toast('已复制！发给朋友吧')); }
 }
 </script>
 </body>
