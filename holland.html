@@ -196,6 +196,9 @@ body {
 <div class="toast" id="toast"></div>
 
 <script>
+window.onerror = function(msg, url, line) {
+  document.body.innerHTML += '<div style="position:fixed;top:0;left:0;right:0;background:red;color:#fff;padding:12px;z-index:9999;font-size:13px;">JS错误: '+msg+' (行'+line+')</div>';
+};
 // ==================== 数据定义 ====================
 
 // ---------- 霍兰德 ----------
