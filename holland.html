@@ -511,8 +511,10 @@ function selectTest(key){
   currentTest = t;
   scores = {}; for(let k of t.types) scores[k]=0;
   qi=0; result=null; unlocked=false;
-  document.getElementById('pbar').style.background = 'linear-gradient(90deg,'+t.color+',#764ba2)';
-  show('quiz'); renderQ();
+  show('quiz');
+  var pb = document.getElementById('pbar');
+  if(pb) pb.style.background = 'linear-gradient(90deg,'+t.color+',#764ba2)';
+  renderQ();
 }
 
 // ==================== 题目 ====================
