@@ -91,6 +91,20 @@ body {
   cursor:pointer; letter-spacing:1px; box-shadow:0 4px 12px rgba(102,126,234,0.3);
 }
 .share-btn:active { transform:scale(0.96); }
+.daily-quote {
+  text-align:center; padding:16px 24px; margin:12px 16px;
+  background:linear-gradient(135deg,#fef9f0,#fdf2e9); border-radius:12px;
+  border:1px solid #f0e4d0;
+}
+.daily-quote .dq-text { font-size:14px; color:#8b6914; font-style:italic; line-height:1.8; }
+.daily-quote .dq-author { font-size:11px; color:#bb9966; margin-top:8px; }
+.encourage-box {
+  text-align:center; padding:20px; margin:16px 0;
+  background:linear-gradient(135deg,#f0f4ff,#f5f0ff); border-radius:12px;
+  border:1px solid #dde4f8;
+}
+.encourage-box .enc-text { font-size:14px; color:#445588; line-height:1.8; font-weight:bold; }
+.encourage-box .enc-icon { font-size:28px; margin-bottom:8px; }
 
 /* ===== 完整报告 ===== */
 #full { padding:24px 20px; }
@@ -167,6 +181,7 @@ body {
       </div>
       <div class="tc-arrow">›</div>
     </div>
+    <div class="daily-quote" id="dailyQuote"></div>
     <div class="test-card" onclick="selectTest('talent')">
       <div class="tc-icon">🌟</div>
       <div class="tc-info">
@@ -1509,8 +1524,39 @@ function renderFull(){
   if(r.strength) html += `<div class="sec"><h3>⭐ 天赋优势</h3><p>${r.strength}</p></div>`;
   if(r.weak) html += `<div class="sec"><h3>⚠️ 注意提醒</h3><p>${r.weak}</p></div>`;
   if(r.advice) html += `<div class="sec"><h3>💡 发展建议</h3><p>${r.advice}</p></div>`;
+  var encourages=[
+    {icon:'🌟',text:'每一种性格都有独特的光芒，你的存在本身就是一种价值。'},
+    {icon:'🌱',text:'测试是了解自己的起点，真正的改变从接纳自己开始。'},
+    {icon:'💫',text:'你不必成为任何人，你只需要成为更好的自己。'},
+    {icon:'🦋',text:'了解自己，不是为了改变本质，而是为了活出本真。'},
+    {icon:'✨',text:'世界上没有两片相同的叶子，也没有两个相同的人。这很美好。'},
+    {icon:'🌙',text:'每个人都有自己的节奏。不必着急，你正在成为你应该成为的人。'},
+  ];
+  var enc=encourages[Math.floor(Math.random()*encourages.length)];
+  html += '<div class="encourage-box"><div class="enc-icon">'+enc.icon+'</div><div class="enc-text">'+enc.text+'</div></div>';
   $('frbody').innerHTML = html;
 }
+
+// 每日一言
+(function(){
+  var quotes=[
+    {text:'认识自己，是所有智慧的开始。',author:'苏格拉底'},
+    {text:'你生来独特，不必活成别人的副本。',author:''},
+    {text:'你的价值不取决于你做了什么，而在于你是谁。',author:''},
+    {text:'每一次自我了解，都是给自己的礼物。',author:''},
+    {text:'别急着成为别人，先成为自己。',author:''},
+    {text:'你比自己想象的要强大得多。',author:''},
+    {text:'人生不是一场竞赛，而是一次独一无二的旅程。',author:''},
+    {text:'有时候你在找答案，其实答案一直在你心里。',author:''},
+    {text:'每一种性格，都是宇宙的一种表达。',author:''},
+    {text:'不要问世界需要什么，问什么让你充满活力。',author:'霍华德·瑟曼'},
+    {text:'你不需要变得完美，你只需要变得真实。',author:''},
+    {text:'真正的成长，是越来越像自己。',author:''},
+  ];
+  var q=quotes[Math.floor(Math.random()*quotes.length)];
+  var el=document.getElementById('dailyQuote');
+  if(el) el.innerHTML='<div class="dq-text">"'+q.text+'"</div>'+(q.author?'<div class="dq-author">—— '+q.author+'</div>':'');
+})();
 
 // 社交证明
 (function(){ var c=3800+Math.floor(Math.random()*400); setInterval(function(){ c+=Math.floor(Math.random()*3); document.getElementById('unlockCount').textContent=c.toLocaleString(); },8000+Math.random()*4000); })();
