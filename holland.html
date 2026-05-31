@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>霍兰德职业兴趣测试</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  background:#f5f0eb; color:#333;
+  min-height:100vh; display:flex; justify-content:center;
+}
+.container { width:100%; max-width:420px; min-height:100vh; position:relative; background:#fff; }
+.screen { display:none; flex-direction:column; min-height:100vh; }
+.screen.active { display:flex; }
+
+/* 首页 */
+.home-bg {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color:#fff; text-align:center; padding:60px 24px 40px; flex:1;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+.home-icon { font-size:56px; margin-bottom:16px; }
+.home-title { font-size:24px; font-weight:bold; letter-spacing:3px; margin-bottom:6px; }
+.home-sub  { font-size:13px; opacity:0.85; margin-bottom:8px; }
+.home-badge { display:inline-block; padding:4px 14px; background:rgba(255,255,255,0.15); border-radius:12px; font-size:11px; }
+.home-info { background:#f8f7f4; text-align:center; padding:24px 20px; }
+.home-info p { font-size:13px; color:#888; line-height:2; }
+.start-btn {
+  display:block; margin:24px auto 0; padding:15px 56px;
+  background:linear-gradient(135deg,#667eea,#764ba2); color:#fff;
+  border:none; border-radius:28px; font-size:17px; font-weight:bold;
+  letter-spacing:2px; cursor:pointer; box-shadow:0 4px 16px rgba(102,126,234,0.35);
+}
+.start-btn:active { transform:scale(0.96); }
+
+/* 题目 */
+#quiz { padding:24px 20px; }
+.progress-bar { height:4px; background:#eee; border-radius:2px; margin-bottom:28px; }
+.progress-fill { height:100%; background:linear-gradient(90deg,#667eea,#764ba2); border-radius:2px; transition:width .3s; }
+.q-num { font-size:12px; color:#999; margin-bottom:6px; }
+.q-text { font-size:18px; font-weight:bold; color:#333; margin-bottom:24px; line-height:1.5; }
+.opt {
+  display:block; width:100%; padding:14px 16px; margin-bottom:8px;
+  background:#f8f7f4; border:1px solid #e8e4de; border-radius:10px;
+  color:#555; font-size:14px; text-align:left; cursor:pointer; transition:all .15s;
+}
+.opt:active { background:#ede8ff; border-color:#667eea; color:#333; }
+
+/* 结果页 */
+#result { padding:24px 20px; }
+.res-header { text-align:center; margin:20px 0 24px; }
+.res-icon { font-size:64px; margin-bottom:10px; }
+.res-type { font-size:22px; font-weight:bold; color:#333; margin-bottom:4px; letter-spacing:2px; }
+.res-code { font-size:13px; color:#999; }
+.res-card {
+  background:#f8f7f4; border-radius:12px; padding:18px; margin-bottom:20px;
+}
+.res-card h3 { font-size:14px; color:#667eea; margin-bottom:10px; }
+.res-card p { font-size:13px; color:#666; line-height:1.8; }
+
+.lock-box {
+  position:relative; border-radius:12px; overflow:hidden; margin:16px 0;
+  background:#fafafa; border:1px solid #eee;
+}
+.lock-preview { padding:18px; filter:blur(5px); user-select:none; }
+.lock-preview h3 { font-size:14px; color:#667eea; margin-bottom:8px; }
+.lock-preview p { font-size:12px; color:#999; line-height:1.8; }
+.lock-cover {
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; background:rgba(255,255,255,0.65);
+}
+.lock-icon { font-size:28px; margin-bottom:6px; }
+.lock-text { font-size:14px; color:#667eea; font-weight:bold; margin-bottom:12px; }
+.unlock-btn {
+  padding:10px 28px; background:linear-gradient(135deg,#667eea,#764ba2);
+  color:#fff; border:none; border-radius:20px; font-size:14px; font-weight:bold;
+  cursor:pointer; letter-spacing:1px;
+}
+.unlock-btn:active { transform:scale(0.96); }
+
+.share-bar { text-align:center; margin-top:20px; padding-bottom:30px; }
+.share-btn {
+  padding:12px 36px; background:#fff; border:1px solid #ddd;
+  color:#666; border-radius:24px; font-size:13px; cursor:pointer; letter-spacing:1px;
+}
+.share-btn:active { background:#f5f0eb; }
+
+/* 完整报告 */
+#full { padding:24px 20px; }
+.sec { margin-bottom:22px; }
+.sec h3 { font-size:15px; color:#667eea; margin-bottom:10px; border-left:3px solid #667eea; padding-left:10px; }
+.sec p,.sec li { font-size:13px; color:#555; line-height:1.9; }
+.sec ul { padding-left:16px; }
+.tag-row { display:flex; flex-wrap:wrap; gap:6px; }
+.tag {
+  padding:5px 14px; background:#ede8ff; color:#667eea;
+  border-radius:14px; font-size:12px;
+}
+
+.toast {
+  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  background:rgba(0,0,0,0.8); color:#fff; padding:12px 24px;
+  border-radius:8px; font-size:13px; z-index:99; display:none;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== 首页 ========== -->
+<div class="screen active" id="home">
+  <div class="home-bg">
+    <div class="home-icon">🧭</div>
+    <div class="home-title">霍兰德职业兴趣测试</div>
+    <div class="home-sub">Holland Code Career Test</div>
+    <div class="home-badge">基于 RIASEC 六型理论</div>
+  </div>
+  <div class="home-info">
+    <p>◉ 15 道选择题，约 3 分钟完成<br>
+       ◉ 发现你的主导人格类型<br>
+       ◉ 匹配最适合你的职业方向<br>
+       ◉ 全球 3000 万+ 人使用过的经典测试</p>
+    <button class="start-btn" onclick="start()">开 始 测 试</button>
+  </div>
+</div>
+
+<!-- ========== 题目 ========== -->
+<div class="screen" id="quiz">
+  <div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+  <div class="q-num" id="qnum"></div>
+  <div class="q-text" id="qtext"></div>
+  <div id="opts"></div>
+</div>
+
+<!-- ========== 免费结果 ========== -->
+<div class="screen" id="result">
+  <div class="res-header">
+    <div class="res-icon" id="ricon"></div>
+    <div class="res-type" id="rtype"></div>
+    <div class="res-code" id="rcode"></div>
+  </div>
+  <div class="res-card" id="rcard"></div>
+  <div class="lock-box">
+    <div class="lock-preview" id="lprev"></div>
+    <div class="lock-cover">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-text">解锁完整职业报告</div>
+      <button class="unlock-btn" onclick="unlock()">¥1 解锁完整报告</button>
+    </div>
+  </div>
+  <div class="share-bar">
+    <button class="share-btn" onclick="shareIt()">📤 测测朋友的职业人格</button>
+  </div>
+</div>
+
+<!-- ========== 完整报告 ========== -->
+<div class="screen" id="full">
+  <div class="res-header">
+    <div class="res-icon" id="fricon"></div>
+    <div class="res-type" id="frtype"></div>
+  </div>
+  <div id="frbody"></div>
+  <div class="share-bar" style="padding-top:10px;">
+    <button class="share-btn" onclick="shareIt()">📤 测测朋友的职业人格</button>
+  </div>
+</div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ========== 题目（霍兰德六型，每型 2-3 题，共 15 题）==========
+const Q = [
+  { text:'动手操作工具或修理物品让你感到快乐吗？', type:'R' },
+  { text:'你喜欢在户外工作，而不是坐在办公室里吗？', type:'R' },
+  { text:'你更喜欢动手实践，而不是阅读理论吗？', type:'R' },
+  { text:'你享受做科学实验或分析数据的过程吗？', type:'I' },
+  { text:'遇到不懂的事，你会一直查资料直到弄明白吗？', type:'I' },
+  { text:'你善于发现事物背后的规律和逻辑吗？', type:'I' },
+  { text:'你对绘画、音乐、写作等创作活动有热情吗？', type:'A' },
+  { text:'你的想象力丰富，经常在脑子里"编故事"吗？', type:'A' },
+  { text:'你不喜欢被规则束缚，喜欢用自己独特的方式做事吗？', type:'A' },
+  { text:'朋友遇到困难会主动找你倾诉或寻求建议吗？', type:'S' },
+  { text:'你喜欢教别人东西，帮助对方成长吗？', type:'S' },
+  { text:'你善于察觉别人的情绪变化吗？', type:'S' },
+  { text:'你在团队中喜欢担任领导者的角色吗？', type:'E' },
+  { text:'你喜欢说服别人接受你的观点吗？', type:'E' },
+  { text:'你对商业、赚钱、创业有强烈的兴趣吗？', type:'E' },
+  { text:'你做事喜欢提前规划，不喜欢临时抱佛脚吗？', type:'C' },
+  { text:'你注重细节，能够发现别人忽略的小错误吗？', type:'C' },
+  { text:'你善于整理和分类，喜欢让一切井井有条吗？', type:'C' },
+];
+
+// ========== 结果 ==========
+const RES = {
+R:{ icon:'🔧', name:'现实型', eng:'Realistic', code:'R 型',
+  summary:'你是动手能力极强的实干家。喜欢和"物"打交道胜过和"人"打交道，讨厌空谈，信奉"做出来再说"。动手操作、户外运动、机械修理都是你的舒适区。',
+  traits:['务实','直率','稳定','动手能力强','不善言辞'],
+  careers:'工程师、技术员、建筑师、飞行员、厨师、机械师、农艺师、消防员、运动员',
+  weak:'不太喜欢社交场合和长篇大论的工作。表达能力和人际敏感度需要刻意练习，在需要"人情世故"的环境里可能会觉得累。',
+  advice:'选择能让你看到具体成果的工作——修理好的机器、建好的房子、种出来的作物。避免纯坐办公室、纯写报告的工作。你的价值在手里，不在嘴上。' },
+
+I:{ icon:'🔬', name:'研究型', eng:'Investigative', code:'I 型',
+  summary:'你是天生的思考者。对未知充满好奇，喜欢刨根问底。一个人安安静静研究一个课题对你来说不是折磨，是享受。逻辑严密，善于分析和解决问题。',
+  traits:['理性','好奇','独立','善于分析','逻辑思维强'],
+  careers:'科学家、医生、程序员、数据分析师、教授、研究员、工程师、药剂师',
+  weak:'社交不是你的强项。有时过于理性会让人觉得"冷"。需要注意不要把"分析问题"当成"解决问题"——有时候行动比分析更重要。',
+  advice:'选择需要用脑的工作，最好是持续学习型行业（科研、IT、医学）。避免纯销售和纯管理方向。你的竞争优势在深度，不在速度。' },
+
+A:{ icon:'🎨', name:'艺术型', eng:'Artistic', code:'A 型',
+  summary:'你是充满创造力的人。不喜欢循规蹈矩，讨厌死板的流程。你的大脑是发散式的——一个点可以联想到十个画面。表达自我是你的本能，无论是通过文字、画面、声音还是任何形式。',
+  traits:['创造力强','直觉敏锐','自由洒脱','情感丰富','厌恶规则'],
+  careers:'设计师、作家、摄影师、演员、音乐人、导演、画师、插花师、策展人',
+  weak:'对重复性的、循规蹈矩的工作极度不耐受。有时候过于理想化，容易和"现实"起冲突。经济观念较弱，需要注意财务管理。',
+  advice:'找一个能发挥你审美和创造力的职业，但保留一份稳定的收入来源做底。你的天赋需要时间和空间来长成，不要急着"务实"。' },
+
+S:{ icon:'🤝', name:'社会型', eng:'Social', code:'S 型',
+  summary:'你是人际关系的天然高手。善于倾听，共情能力强，别人在你身边会觉得"被理解"。帮助别人成长、看到别人因为你的帮助变好——这给你最大的成就感。',
+  traits:['善解人意','乐于助人','沟通能力强','有耐心','有责任感'],
+  careers:'教师、心理咨询师、护士、社工、HR、培训师、销售、导游、主持人',
+  weak:'太在意别人的感受有时会委屈自己。需要建立人际边界——帮助别人之前，先照顾好自己。有时候容易卷入别人的情绪里。',
+  advice:'选择与人打交道的工作，最好能直接看到"帮助的效果"（老师看到学生进步、医生看到病人康复）。你的价值在于温暖他人，别浪费这个天赋。' },
+
+E:{ icon:'💼', name:'企业型', eng:'Enterprising', code:'E 型',
+  summary:'你有天然的领导者气质。自信、果断、目标导向。你不怕冲突，甚至享受在竞争中获胜的快感。说服别人、带领团队、做出决策——这些是让你兴奋的事情。',
+  traits:['自信','果断','领导力','口才好','野心'],
+  careers:'企业家、销售总监、律师、政治家、项目经理、投资顾问、经纪人、制片人',
+  weak:'有时候过于强势，容易忽略他人的感受。需要培养"倾听"的习惯——最优秀的领导者不是最能说的，是最能"听"的。偶尔慢下来，看看身边的人。',
+  advice:'选择有晋升空间、有竞争、有挑战性的工作。你的驱动力是"赢"，在一个有明确胜负标准的环境里你会成长最快。创业是你的强项方向。' },
+
+C:{ icon:'📋', name:'常规型', eng:'Conventional', code:'C 型',
+  summary:'你是秩序的守护者。做事有条理，注重细节，在混乱无序的环境里会感到不安。交给你的任务你会一丝不苟地完成，是团队里最可靠的"压舱石"。',
+  traits:['细心','可靠','有条理','执行力强','追求准确'],
+  careers:'会计、审计、行政、编辑、项目经理、数据分析师、银行职员、档案管理、公务员',
+  weak:'不太适应频繁变化和模糊指令。有时候过于注重细节而忽略大局。需要培养"宏观视野"——偶尔从具体事务中抬起头来看看方向。',
+  advice:'选择有明确流程、有标准、有规则的工作。你在结构化环境里如鱼得水。避免需要大量"即兴发挥"的和高度不确定性的工作。你的价值是让一切有序运转。' }
+};
+
+// ========== 状态 ==========
+let scores = {}, qi=0, result=null, unlocked=false;
+
+function $(id){ return document.getElementById(id); }
+function show(id){
+  ['home','quiz','result','full'].forEach(s=>$(s).classList.remove('active'));
+  $(id).classList.add('active'); window.scrollTo(0,0);
+}
+function toast(m){ const t=$('toast'); t.textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',1500); }
+
+// ========== 开始 ==========
+function start(){
+  scores={R:0,I:0,A:0,S:0,E:0,C:0}; qi=0; result=null; unlocked=false; show('quiz'); renderQ();
+}
+function renderQ(){
+  if(qi>=Q.length){ finish(); return; }
+  const q=Q[qi];
+  $('pbar').style.width=((qi+1)/Q.length*100)+'%';
+  $('qnum').textContent=`第 ${qi+1} / ${Q.length} 题`;
+  $('qtext').textContent=q.text;
+  const o=$('opts'); o.innerHTML='';
+  ['非常符合','比较符合','不太符合','完全不符'].forEach((t,i)=>{
+    const b=document.createElement('button'); b.className='opt'; b.textContent=t;
+    b.onclick=()=>{ scores[q.type]+=(3-i); qi++; renderQ(); };
+    o.appendChild(b);
+  });
+}
+
+// ========== 结算 ==========
+function finish(){
+  let max=0,best='R'; for(let k in scores){ if(scores[k]>max){max=scores[k];best=k;} }
+  result=RES[best]; unlocked=false; renderRes(); show('result');
+}
+function renderRes(){
+  const r=result;
+  $('ricon').textContent=r.icon; $('rtype').textContent=r.name; $('rcode').textContent=r.eng+' · '+r.code;
+  $('rcard').innerHTML=`<h3>人格概览</h3><p>${r.summary}</p>`;
+  $('lprev').innerHTML=`
+    <h3>完整报告包含</h3>
+    <p>✦ 性格特质详析<br>✦ 适合职业列表<br>✦ 弱点与注意提醒<br>✦ 个性化职业发展建议</p>`;
+}
+
+// ========== 解锁 ==========
+function unlock(){
+  unlocked=true; renderFull(); show('full');
+}
+function renderFull(){
+  const r=result;
+  $('fricon').textContent=r.icon; $('frtype').textContent=r.name+' · 完整职业报告';
+  $('frbody').innerHTML=`
+    <div class="sec"><h3>🔍 人格概述</h3><p>${r.summary}</p></div>
+    <div class="sec"><h3>📋 性格特质</h3><div class="tag-row">${r.traits.map(t=>'<span class="tag">'+t+'</span>').join('')}</div></div>
+    <div class="sec"><h3>💼 适配职业</h3><p>${r.careers}</p></div>
+    <div class="sec"><h3>⚠️ 注意提醒</h3><p>${r.weak}</p></div>
+    <div class="sec"><h3>💡 发展建议</h3><p>${r.advice}</p></div>`;
+}
+
+function shareIt(){
+  const r=result;
+  const t=`🧭 我的职业人格：${r.name}（${r.code}）
+
+测测你属于霍兰德六型中的哪一种？`;
+  if(navigator.share){ navigator.share({title:'霍兰德职业测试',text:t,url:location.href}); }
+  else { navigator.clipboard.writeText(t+'\n'+location.href).then(()=>toast('已复制！发给朋友吧')); }
+}
+</script>
+</body>
+</html>
